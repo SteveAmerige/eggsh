@@ -1,0 +1,83 @@
+#!/bin/bash
+
+main()
+{
+   local Options
+   Options=$(getopt -o '' -l "display:,xauthority:" -n "${FUNCNAME[0]}" -- "$@") || return
+   eval set -- "$Options"
+
+   local Var="Value"
+   while true ; do
+      case "$1" in
+      --display)     export DISPLAY="$2"; shift 2;;
+      --xauthority)  export XAUTHORITY="$2"; shift 2;;
+      --)            shift; break;;
+      *)             break;;
+      esac
+   done
+
+   # Determine this program's path, name, and starting directory
+   local -gr _program="$(readlink -f "${BASH_SOURCE[0]}")"
+   local -gr __=$(basename "$_program")
+   local -gr _invocationDir="$(readlink -f .)"
+
+   # Ensure that this script is being run as root
+   if [[ $(whoami) != root ]]; then
+      if sudo -n true >/dev/null 2>&1; then
+         sudo bash "$_program" --display "$DISPLAY" --xauthority "$HOME/.Xauthority"
+         return
+      else
+         echo "Error: Sudo access is required"
+         return 1
+      fi
+   fi
+
+   # Get the image directory and the name of the executable
+   local -xgr ImageDir="$(readlink -f "$(dirname "$_program")/../image")"
+   local -xgr Program="%{EXECUTABLE}%"
+
+   # Assume that Apache is not installed in the container
+   local ApacheIsAvailable=false
+   local HttpdServicePath
+   if HttpdServicePath="$(readlink -f "$ImageDir/etc/systemd/system/httpd.service")"; then
+      if [[ $HttpdServicePath != '/dev/null' ]]; then
+         ApacheIsAvailable=true
+      fi
+   fi
+
+   # If Apache is available, then:
+   #    Allow X
+   #    Obtain a port to be used for web pages (instead of the default port 80)
+   if $ApacheIsAvailable && [[ -n $XAUTHORITY && -n $DISPLAY ]]; then
+      echo "export DISPLAY=$DISPLAY" > "$ImageDir/etc/profile.d/display.sh"
+      chmod 755 "$ImageDir/etc/profile.d/display.sh"
+      xhost +
+
+      echo "Finding next available port..."
+      local Port="$("$Program" :port next available -m 10000)"
+      echo "Listen $Port" > "$ImageDir/etc/httpd/conf.d/listen.conf"
+
+      # Startup the container with X and port forwarding
+      systemd-nspawn \
+         --quiet \
+         -b \
+         -D "$ImageDir" \
+         -M "%{MACHINE_NAME}%" \
+         --setenv=DISPLAY=$DISPLAY \
+         --setenv=XAUTHORITY=$XAUTHORITY \
+         --bind=/tmp/.X11-unix \
+         --bind-ro="$XAUTHORITY:/home/sas/.Xauthority"
+
+   # Else, startup the container without X
+   else
+      if $ApacheIsAvailable && [[ -z $XAUTHORITY ]]; then
+         echo "X is not enabled; missing $HOME/.Xauthority"
+         echo "Starting without X..."
+         sleep 5
+      fi
+
+      systemd-nspawn -bD "$ImageDir" -M "%{MACHINE_NAME}%"
+   fi
+}
+
+main "$@"

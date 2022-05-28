@@ -1,0 +1,641 @@
+{
+  "filenames": {
+    "LICENSE.txt": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "3b83ef96387f14655fc854ddc3c6bd57",
+      "mode": "644",
+      "user": "1009"
+    },
+    "NOTICE.txt": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "19c591ff6c6c26e920c0971a9d974027",
+      "mode": "644",
+      "user": "1009"
+    },
+    "_bootstrap": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "_bootstrap/alias.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "ae00bd67ca68e4e864419c5aa70d5486",
+      "mode": "644",
+      "user": "1009"
+    },
+    "_bootstrap/createinstaller.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "08fb17b442a310a1543df889858237a5",
+      "mode": "755",
+      "user": "1009"
+    },
+    "_bootstrap/egg": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0aa8184bc7bc7f03398086853c8e3db6",
+      "mode": "755",
+      "user": "1009"
+    },
+    "_bootstrap/private.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "71045e5710f3cdf5012701e612be140f",
+      "mode": "644",
+      "user": "1009"
+    },
+    "_bootstrap/public.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "bfeb6262338a6ae388dab8859449e53d",
+      "mode": "644",
+      "user": "1009"
+    },
+    "_doc": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "_doc/quickstart.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "57420dbeb48e2a3ead0c4d425bda751c",
+      "mode": "644",
+      "user": "1009"
+    },
+    "_doc/transform.txt": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "02222358f4bdb57fd23c4bda36ca686f",
+      "mode": "644",
+      "user": "1009"
+    },
+    "array": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "array/array.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "f59a4ab9c4fabd54761630086c2cd27e",
+      "mode": "644",
+      "user": "1009"
+    },
+    "array/private.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0adc284ee73928c7de93897d222461d1",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "build/_build": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "build/_build/bin": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "build/_build/bin/addon.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "7481953a1bbf5343dd0e1d99735e6844",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/_build/bin/full.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "aaef53e738c1140fa37b96d1b0722743",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/_build/bin/start": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "b4d2eb98f7697166cd68578e557ab696",
+      "mode": "755",
+      "user": "1009"
+    },
+    "build/_build/dir": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "build/_build/dir/installer.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "a8146d1847e9cdf20158d9f081b2dd85",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build,Assemble.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "1233cb5221af39ecdc02625a684f8d0d",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build,GetAndUpdateVersion.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "58dc6cc61d2f95170dd7c390fee55dec",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build,GitClone.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "c3dd80ede0ceb3d9e21c855be30d0dfd",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build,Modify.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "fd76e699e1c9a52fd977eed5b9908adb",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build,Package.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "c69f096078d91760e4fe1f5210f251c8",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build,ReadSpec.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "74e7cb26401e2c54600bf3ea1a6b2765",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build,UpdateGit.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "e3069e717e64a62a4e8abc2403ccd05b",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "22c7d2589f25e4353a19a713c49c5559",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build_assemble.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "1796f2ed0d01a1e7f3ed75eb1ac7e777",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build_manifest.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "d7f70f0eb60afb39a089dba87d06ccf1",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build_modify_add_nspawn.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "2d8cf50c789e400265e6c79da954fa42",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build_modify_create_manifest.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "3224ebca3192b88f0f6db657b0167d79",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build_modify_create_nspawn_stub_only.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "3e9db0c8d7c4b3897b79a48ae9964e2a",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build_modify_finalize_nspawn.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "e26abd04deeecd71291e0eb1b74efe83",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build_modify_precompile_nspawn.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "8ebf98dd9d65496a89dc1d0fbed2d05e",
+      "mode": "644",
+      "user": "1009"
+    },
+    "build/build_modify_remove_percent_paths.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "818e61e09ba75d0603b09ee5f3bef93e",
+      "mode": "644",
+      "user": "1009"
+    },
+    "data": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "data/convert.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "2d7fd56a2743d6999d282fc02977243d",
+      "mode": "644",
+      "user": "1009"
+    },
+    "data/data.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "526cb1431d8439d9912e598fb34e6625",
+      "mode": "644",
+      "user": "1009"
+    },
+    "data/schema.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "804089c3aedaf29756ef1292d9dd87a3",
+      "mode": "644",
+      "user": "1009"
+    },
+    "exception": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "exception/exception.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "e817dc189c09d0326d3db91dc541e9a4",
+      "mode": "644",
+      "user": "1009"
+    },
+    "file": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "file/file.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "99315b692314bb57f6921d901c192693",
+      "mode": "755",
+      "user": "1009"
+    },
+    "help": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "help/help.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "9d854f0cc2e71173492400535de51a7e",
+      "mode": "644",
+      "user": "1009"
+    },
+    "json": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "json/jq.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "2c7f5b837292b5cb17e4375f298bd2d0",
+      "mode": "644",
+      "user": "1009"
+    },
+    "json/json.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "a678f95732aee4889160ed9333fc1f71",
+      "mode": "644",
+      "user": "1009"
+    },
+    "json/set.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "23f915c55a34244e93e5983cfb55261b",
+      "mode": "644",
+      "user": "1009"
+    },
+    "manifest.json": {
+      "filetype": "regular empty file",
+      "group": "100",
+      "last_modified": "2018-04-27.085442",
+      "md5sum": "d41d8cd98f00b204e9800998ecf8427e",
+      "mode": "644",
+      "user": "1009"
+    },
+    "object": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "object/:object.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "84317e5cf8405598923fc0b2119bed01",
+      "mode": "644",
+      "user": "1009"
+    },
+    "object/function.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "f591e18c854d29bdb6aa2936ceee58e1",
+      "mode": "644",
+      "user": "1009"
+    },
+    "object/object.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "c1fe941cc277b75d095e11f032e28c5c",
+      "mode": "644",
+      "user": "1009"
+    },
+    "object/package.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "f40cc5cc3c7827d85d5186fab074fffc",
+      "mode": "644",
+      "user": "1009"
+    },
+    "object/private.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "34f556538f80354e6e1fb3b6382dea2c",
+      "mode": "644",
+      "user": "1009"
+    },
+    "parser": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "parser/parser.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "5c7cda12b35ee96f80e3e77e1d6047e4",
+      "mode": "644",
+      "user": "1009"
+    },
+    "parser/private.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "a7b562bd36da81c6e9731498ce48ffb7",
+      "mode": "644",
+      "user": "1009"
+    },
+    "port": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "port/port.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "aec98e48a8013ab76fcf2867c063432c",
+      "mode": "644",
+      "user": "1009"
+    },
+    "security": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "security/security.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "138887c258d4be7b89724948c441ccd1",
+      "mode": "644",
+      "user": "1009"
+    },
+    "transform": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "transform/interpret.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "1203493fcef4f7be0f921a65d32799df",
+      "mode": "644",
+      "user": "1009"
+    },
+    "transform/scan.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "d0d8a6949730b28b7292641df6a11d89",
+      "mode": "644",
+      "user": "1009"
+    },
+    "transform/transform.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "9aa1d406cd123cd2330ee253494e5389",
+      "mode": "644",
+      "user": "1009"
+    },
+    "utility": {
+      "filetype": "directory",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "0",
+      "mode": "755",
+      "user": "1009"
+    },
+    "utility/archive.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "ce73acc1315841e424859f6bc477f37e",
+      "mode": "644",
+      "user": "1009"
+    },
+    "utility/command.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "7f7b21a3587f068b8aad4cdec9082768",
+      "mode": "644",
+      "user": "1009"
+    },
+    "utility/string.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "ed6273720002ca5873ef74e0452ee6a2",
+      "mode": "644",
+      "user": "1009"
+    },
+    "utility/text.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "1918824759c1e63dbe650c37e733ee4e",
+      "mode": "644",
+      "user": "1009"
+    },
+    "utility/utility.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "549a6617e332c4335e36f4d680c0b04c",
+      "mode": "644",
+      "user": "1009"
+    },
+    "utility/vi.sh": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.084916",
+      "md5sum": "78e626a2452803297f6aebda1ee51990",
+      "mode": "644",
+      "user": "1009"
+    },
+    "version.json": {
+      "filetype": "regular file",
+      "group": "100",
+      "last_modified": "2018-04-27.085006",
+      "md5sum": "f73b80e85904e2cc095b5e9f40e8d0d9",
+      "mode": "644",
+      "user": "1009"
+    }
+  },
+  "version": {
+    "date": "2018-04-27.085002",
+    "name": "Eggsh Core",
+    "tags": [],
+    "version": {
+      "build": 1089,
+      "copy": 0,
+      "fix": 0,
+      "major": 10,
+      "minor": 4,
+      "patch": 0
+    }
+  }
+}

@@ -1,0 +1,76 @@
+TRANSFORM
+=========
+
+DELIMITERS
+----------
+   <delimiter> ::= <DB>|<DE>|<MB>|<ME>
+
+   <DB> ::= "%{%                          # DELIMITER BEGIN
+   <DE> ::= "}%"                          # DELIMITER END
+   <DC> ::= "/}%"                         # DELIMITER CLOSE; shorthand for: }%%{/}%
+   <MB> ::= "{"                           # MIDDLE BEGIN
+   <ME> ::= "}"                           # MIDDLE END
+
+TRANSFORM
+---------
+   # NOTE: Hereafter, for readability, the delimiters are shown as: %{ %} { }
+   #       Literals other than '[' and ']' are not quoted below.
+
+   <transform> ::=
+      %{<transformRequest>}%<text>%{/}%   # Apply transform request with <text> as input
+   |  %{<transformRequest>/}%             # Apply transform request with no input
+
+   <transformRequest> ::=
+      <mode><type><requestExpression>     # Requests are typed
+
+   <mode> ::=
+      ^                                   # Disable transform evaluation of <text> block
+   |  [ <modifier> ] :                    # Apply <modifer> to <requestExpression> (default: bash)
+
+   <type> ::= <empty>                     # The default type: a character-based transform
+   |  @                                   # Line-based transform
+   |  *                                   # Character-based transform
+
+   <text> ::= {text block}                # Text block to be acted upon
+
+REQUEST EXPRESSION
+------------------
+   <requestExpression> ::=
+      # {comment}                         # A comment
+   |  ! <name>                            # Execute request named <name>
+   |  <request> } && {... <request>       # On True: Do next if preceding request was non-empty
+   |  <request> } || {... <request>       # On False: Do next if preceding request was empty
+   |  <request> }{... <request>           # Shorthand for: <request> } || {... <request>
+
+   <name> ::= [a-zA-Z][a-zA-Z0-9_]*       # A name is an alphanumeric identifier
+
+REQUEST
+-------
+   <request> ::= [<options>] [<action>]
+
+OPTIONS
+-------
+   <options> ::=
+      -b <before>                         # Insert <before> before each transform replacement
+   |  -a <after>                          # Insert <after> after each transform replacement
+   |  -s <separator>                      # Place <separator> between transforms
+   |  -d <default>                        # If transform is empty, use the literal <default> instead
+   |  -n <name>                           # Save transform as <name> for future use
+   |  -i <handle> | <<handle>             # Take input from <handle>
+   |  -o <handle> | ><handle>             # Write output to <handle>
+
+ACTION
+------
+   <action> ::=
+      <empty>                             # Invoke /usr/bin/env on <text>
+   |  .<jsonFilter>                       # Apply JSON filter to <input>
+   |  $BashVariable [ '['<subset>']' ]    # Select variable with optional subset
+   |  &<transformVar> [ '['<subset>']' ]  # Transform variable getter
+   |  &<transformVar>[<key>]=<value>      # Transform variable setter
+   |  <function> <args>                   # Call function with <args>, passing <text> and context strings
+
+   <subset> ::=
+      <offset>:[<length>]                 # Select by offset and length or to end of string/array
+   |  [<offset>]:<length>                 # Select by offset and length or to beginning of string/array
+   |  <index1>..<index2>                  # Select a specific positional range
+   |  <key>                               # Select by key (for both positional or associative arrays)

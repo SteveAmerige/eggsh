@@ -1,0 +1,325 @@
+#!/bin/bash
+########################################################
+#  © Copyright 2005-2018 Server Science Incorporated.  #
+#  Licensed under the Apache License, Version 2.0.     #
+########################################################
+
+# Public Variables:
+#  _invocationDir       - the directory that the script was invoked from
+
+#  _exePath             - the full path of the program executable
+#  _exe                 - the basename of the program executable
+#  _baseDir             - the platform base directory (under which packages.d is found)
+
+#  __                   - the basename of the program executable
+#  _program             - the full path of the program executable
+#  _releaseDir          - the core framework base directory
+
+#  _distributionType    - either "source" or "release"
+#  _sourceDir           - if (_distributionType = release) then $_installDir else $_installDir/..
+#  _sourceDir           - if release then same as _releaseDir; if source then _releaseDir's parent dir
+#  _packagesDir         - the full path to the packages.d directory
+#
+# Private Variables:
+#  __ParserInitialize   - parser initialization
+#  __ParserCollect      - parser collect input
+#  __ParserExecute      - parser execute
+#  __ParserFinally      - parser tear down
+#  __CacheScriptsFile
+
+::main()
+{
+   # Set platform options
+   shopt -s extdebug
+   set -o pipefail
+   set -o errtrace
+
+   ##### PROGRAM
+   # _program: the full path to this executable, and __: the platform executable
+   local -xgr _program="$(readlink -f "${BASH_SOURCE[0]}")"
+   local -xgr __=$(basename "$_program")
+
+   ##### DISTRIBUTION TYPE
+   # Determine if this is a source or release distribution.
+   # A source distribution will have the executable in the _bootstrap directory.
+   # A release distribution will have the executable in the bin directory.
+   local BinDir="$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")"
+   if [[ $(basename "$BinDir") = bin ]] ; then
+      local -xgr _distributionType='release'
+      local -xgr _releaseDir="$(readlink -f "$BinDir/..")"
+      local -xgr _sourceDir="$_releaseDir"
+   else
+      local -xgr _distributionType='source'
+      local -xgr _releaseDir="$(readlink -f "$BinDir/../../..")"
+      local -xgr _sourceDir="$(readlink -f "$_releaseDir/..")"
+   fi
+   unset BinDir
+
+   ##### SETTINGS
+   # Settings files are used to determine platform and package behavior
+   local -xgr _SETTINGS="settings"
+   local -xgr _dataSettingsJSONFile="$_SETTINGS.json"
+
+   ##### Determine the dot directory
+   local DotDir="$(tr 'a-z' 'A-Z' <<<"$__" | LC_ALL=C sed 's|[^a-zA-Z]||g')_DOTDIR"
+   if [[ -v $DotDir ]]; then
+      local -xgr _dotDir="${!DotDir}"
+   elif [[ -f $_releaseDir/$_dataSettingsJSONFile ]]; then
+      DotDir="$(jq -r '.dotdir' "$_releaseDir/$_dataSettingsJSONFile" 2>/dev/null)"
+      if [[ -n $DotDir && $DotDir != null ]]; then
+         local -xgr _dotDir="$HOME/$DotDir"
+      fi
+   fi
+   [[ -n $_dotDir ]] || local -xgr _dotDir="$HOME/.$__"
+   unset DotDir
+
+   local -ig __TryLevel=-1
+   local -ag __TryLocals=()
+   local -ag __TryPersist=()
+   local -g _tryStatus=0
+   local -g _tryErrorLine=
+
+   local -ga _setSave=()
+   local -gi __SetSaveIndex=-1
+   local -ga _shoptSave=()
+   local -gi __ShoptSaveIndex=-1
+
+   local -xgA _help
+   local -xgA _info
+
+   # Get the program details and invocation directory
+   local -xga _programOptions=()
+   local -xgr _invocationDir="$(readlink -f .)"
+   local -xg  _verboseness=2
+   local -ga __CommandLinePackages=()
+   local -gA __OrderedPackages
+
+   local -xgr _bootstrapDir="$(find $_releaseDir -name "_bootstrap" | tail -1)"
+
+   local -gr _bin="$_dotDir/bin"
+   local -gr _sbin="$_dotDir/sbin"
+   local -gr __CacheScriptsFile="$_dotDir/cache.sh"
+   local -gr __CacheFunctionsFile="$_dotDir/functions.sh"
+   local -g  __CacheAnnotationsFile="$_dotDir/annotations.sh"
+   local -gr __UnorderedPackagesFile="$_dotDir/packages-unordered.sh"
+   local -gr __OrderedPackagesFile="$_dotDir/packages-ordered.sh"
+   local -gr __ComponentsFile="$_dotDir/components.sh"
+   local -gr __NoAutoRebuildCache="$_dotDir/.noauto"
+   local -xgr _dataDir="$_dotDir/data"
+
+   local -xgr _resourcesDir="$_releaseDir/resources.d"
+
+   local -xgr _PACKAGES_DIR='packages.d'
+   local -xgr _packagesDir="$_releaseDir/$_PACKAGES_DIR"
+
+
+   # The $_dataSettingsArrayFile contains the settings associative array
+   local -xgr _dataPackagesDir="$_dataDir/$_PACKAGES_DIR"
+   local -xgr _dataSettingsArrayFile="$_dataDir/$_SETTINGS.sh"
+   local -xgA _settings
+
+   local -xgr __SystemOrderedPackagesFile="$_releaseDir/conf.d/packageOrder.sh"
+
+   local -xgr __EtcDir="$_releaseDir/etc"
+   local -xgr __InfoFile="$__EtcDir/info.conf"
+
+   shopt -s nullglob
+   local -xgr _corePackage="$(basename "$(dirname "$(echo "$_packagesDir"/*/_bootstrap)")")"
+   local -xgr _corePackageAsVar="$(printf '%s' "$_corePackage" | tr -c 'a-zA-Z0-9_' '_')"
+   shopt -u nullglob
+
+   # Contains the variable name prefix for a package and is valid at function entry only
+   local -g __
+
+   . "$_bootstrapDir/alias.sh"
+   . "$_bootstrapDir/public.sh"
+   . "$_bootstrapDir/private.sh"
+
+   cd "$_invocationDir"
+
+   local Arg
+   local -g __ShowHelp=false
+   local -xg _longHelp=false
+   local -g _topicHelp=false
+   local -xgA _topic
+   local -g __Debug=false
+   local ScriptFile
+   local RebuildCache=false
+   local RemovePackageOrderFile=false
+   local -g __CachePackage=false
+   local -ag __ListPackageOrder=()
+   local Parser="Parser"
+   local -A Exclude
+   local -g __BeforeAfterProcess=true
+   local -g __Describe=false
+   local -g __EditSource=false
+
+   :getopts_init \
+      -o "b                c           d     D        e    x:       h    L:           l        p:       P:      r       R     s:      t:         v       V:" \
+      -l "beforeafterskip,cachepackage,debug,describe,edit,exclude:,help,listpackage:,longhelp,package:,parser:,rebuild,reset,script:,topichelp:,verbose,verboselevel:" \
+      -v Options -- "$@"
+   while :getopts_next OptChar; do
+      case "$OptChar" in
+      -) case "$OPTARG" in
+         beforeafterskip)  __BeforeAfterProcess=false;;
+         cachepackage)     __CachePackage=true;;
+         debug)            __Debug=true; _programOptions+=("-d");;
+         describe)         __Describe=true;;
+         edit)             __EditSource=true;;
+         exclude)          :getopts_set Arg; Exclude["$Arg"]=true;;
+         help)             __ShowHelp=true; break;;
+         listpackage)      :getopts_set Arg; __ListPackageOrder+=("$Arg");;
+         longhelp)         __ShowHelp=true; _longHelp=true; break;;
+         package)
+            :getopts_set Arg
+            [[ $Arg =~ ^[a-zA-Z0-9.-]+$ ]] ||
+               { echo "Invalid package name: $Arg"; return 1; }
+            __CommandLinePackages+=("$Arg")
+            ;;
+         parser)
+            :getopts_set Arg
+            if [[ -n $Arg ]] ; then
+               Parser="$Arg"
+               _programOptions+=("-p '$Arg'")
+            fi
+            ;;
+         rebuild)          RebuildCache=true;;
+         reset)            RemovePackageOrderFile=true; RebuildCache=true;;
+         script)
+            :getopts_set Arg
+            if [[ -n $Arg ]] ; then
+               if [[ $Arg = - ]] ; then
+                  ScriptFile=/dev/stdin
+               elif [[ -f $Arg ]] ; then
+                  ScriptFile=$(readlink -f "$Arg")
+               else
+                  echo "No such file: $Arg"
+               fi
+            fi
+            ;;
+         topichelp)
+            :getopts_set Arg
+            __ShowHelp=true
+            if [[ -n $Arg ]]; then
+               _topicHelp=true
+               _topic["$Arg"]=true;
+            fi
+            ;;
+         verbose)          _verboseness=3; _programOptions+=("-v");;
+         verboselevel)     :getopts_set _verboseness; _programOptions+=("-v");;
+
+         *)                :getopts_skip; break;;
+         esac;;
+
+      '?')                 break;;
+      *)                   :getopts_redirect "$OptChar" || break;;
+      esac
+   done
+   :getopts_done
+
+   mkdir -p "$_dotDir"
+
+   $RebuildCache && rm -f "$__CacheScriptsFile"
+   $RemovePackageOrderFile && rm -f "$__OrderedPackagesFile"
+
+   # Set variables
+   ::Init
+
+   if [[ -f $__CacheScriptsFile ]] && [[ -f $__CacheFunctionsFile ]] ; then
+      if [[ ! -f $__NoAutoRebuildCache ]] ; then
+         local -r Changes=$(find "$_sourceDir" -type f -newer "$__CacheScriptsFile" | head -1)
+         if [[ -n $Changes ]] ; then
+            ::InitBuildCache
+         fi
+      fi
+   else
+      ::InitBuildCache
+   fi
+
+   # Source Cached Files
+   . "$__CacheScriptsFile"
+   . "$__CacheFunctionsFile"
+   . "$__UnorderedPackagesFile"
+   . "$__ComponentsFile"
+   if [[ -f $__InfoFile ]]; then
+      . "$__InfoFile"
+   fi
+   if [[ -f $_dataSettingsArrayFile ]]; then
+      . "$_dataSettingsArrayFile"
+   else
+      :settings_update
+   fi
+
+   # Apply any annotations
+   if [[ -f $__CacheAnnotationsFile ]]; then
+      . "$__CacheAnnotationsFile"
+   fi
+
+   [[ -f $__SystemOrderedPackagesFile ]] && . "$__SystemOrderedPackagesFile"
+   [[ -f $__OrderedPackagesFile ]] && . "$__OrderedPackagesFile"
+
+   # Set initial package order
+   [[ -n ${__OrderedPackages['.']} ]] &&
+   {
+      local Package
+      for Package in ${__OrderedPackages['.']} ; do
+         __CommandLinePackages+=("$Package")
+      done
+   }
+   :package_order
+
+   :command_install_required || return
+
+   $__ShowHelp && { help "${Options[@]}"; return 0; }
+
+   ::CallStartupFunctions || return
+
+   local -gr __ParserInitialize="${Parser}:Initialize"
+   local -gr __ParserCollect="${Parser}:Collect"
+   local -gr __ParserExecute="${Parser}:Execute"
+   local -gr __ParserFinally="${Parser}:Finally"
+
+   local -r __DEFAULT_PARSER="default parser"
+   if ! :function_exists "$__ParserInitialize" ||
+      ! :function_exists "$__ParserCollect" ||
+      ! :function_exists "$__ParserExecute" ||
+      ! :function_exists "$__ParserFinally" ; then
+      echo "Parser not found: ${Parser:-$__DEFAULT_PARSER}"
+      exit 1
+   fi
+
+   cd "$_invocationDir"
+   $__ParserInitialize
+
+   # Append statementlist to execution array
+   [[ -n ${Options[@]} ]] && $__ParserCollect "${Options[@]}"
+
+   # If a script file is specified, append it to execution array
+   local __Line
+   local -a CommandArray
+   if [[ -n $ScriptFile ]] ; then
+      while read -r __Line ; do
+         IFS=$'\001' read -r -a CommandArray <<< "$(xargs printf '%s\1' <<< "$__Line")"
+         $__ParserCollect "${CommandArray[@]}" || exit 1
+      done < "$ScriptFile"
+   fi
+
+   # If in a pipe and haven't already read from stdin, append it to execution array
+#  if ! $RebuildCache && [[ $ScriptFile != /dev/stdin ]] && [[ ${Exclude["pipe"]} != true ]] && read -N 0 -t 0 ; then
+#     while read -r __Line ; do
+#        IFS=$'\001' read -r -a CommandArray <<< "$(xargs printf '%s\1' <<< "$__Line")"
+#        $__ParserCollect "${CommandArray[@]}" || exit 1
+#     done < /dev/stdin
+#  fi
+
+   # Process execution array
+   $__ParserExecute
+
+   # Call all shutdown functions
+   ::CallShutdownFunctions
+
+   # Cleanup parser and return status of last statement
+   $__ParserFinally
+}
+
+::main "$@"
